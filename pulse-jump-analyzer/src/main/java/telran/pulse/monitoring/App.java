@@ -44,16 +44,18 @@ public class App {
 			} else {
 				logger.info("Unhandled event type: " + r.getEventName());
 			}
-			map.forEach((key, value) -> logger.info(key + "=" + value.getN()));
+			logger.info(String.format("patientId: %s, value: %s",
+					map.get(PATIENT_ID_ATTRIBUTE).getN(),
+					map.get(VALUE_ATTRIBUTE).getN()));
 		});
 	}
 
 	private static String logEnvironmentVariables() {
-		return "Environment variables:\n" + 
-            System.getenv().entrySet().stream()
-                .map(entry -> entry.getKey() + "=" + entry.getValue())
-                .collect(Collectors.joining("\n"));
-        
+		return "Environment variables:\n" +
+				System.getenv().entrySet().stream()
+						.map(entry -> entry.getKey() + "=" + entry.getValue())
+						.collect(Collectors.joining("\n"));
+
 	}
 
 	private void setLastValue(String patientId, Integer value) {
@@ -142,5 +144,4 @@ public class App {
 		return jump;
 	}
 
-	
 }
