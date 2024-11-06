@@ -13,7 +13,7 @@ import static telran.pulse.monitoring.Constants.*;
 public class App {
 	static DynamoDbClient client = DynamoDbClient.builder().build();
 	static Logger logger = Logger.getLogger("pulse-jump-analyzer");
-	static float FACTOR;
+	static float factor;
 	static boolean configLogged = false;
 
 	static {
@@ -94,12 +94,12 @@ public class App {
 	}
 
 	private static void factorSetUp() {
-		String factor = System.getenv().getOrDefault("FACTOR", "0.2");
+		String factorStr = System.getenv().getOrDefault("FACTOR", "0.2");
 		try {
-			FACTOR = Float.parseFloat(factor);
+			factor = Float.parseFloat(factorStr);
 		} catch (NumberFormatException e) {
 			logger.severe("Factor value " + factor + " is wrong, set to default value " + DEFAULT_FACTOR);
-			FACTOR = DEFAULT_FACTOR;
+			factor = DEFAULT_FACTOR;
 		}
 	}
 
@@ -145,7 +145,7 @@ public class App {
 	private boolean isJump(Integer currentValue, Integer lastValue) {
 
 		float difference = Math.abs(currentValue - lastValue) / (float) lastValue;
-		boolean jump = difference > FACTOR;
+		boolean jump = difference > factor;
 		if (jump) {
 			logger.warning("Jump detected: currentValue = " + currentValue + ", lastValue = " + lastValue);
 		}
