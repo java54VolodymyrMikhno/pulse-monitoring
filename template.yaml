@@ -89,7 +89,7 @@ Resources:
         WriteCapacityUnits: 5     
       StreamSpecification:
        StreamViewType: NEW_AND_OLD_IMAGES  
-  # Define the publisher Lambda function with permissions
+  
   PulseJumpAnalyzer:
     Type: 'AWS::Serverless::Function'
     Properties:
@@ -110,7 +110,7 @@ Resources:
             FilterCriteria: 
               Filters: 
               - Pattern: '{"eventName": ["INSERT"]}'        
-# Define the publisher Lambda function with permissions
+
   PulseValuesAnalyzer:
     Type: 'AWS::Serverless::Function'
     Properties:

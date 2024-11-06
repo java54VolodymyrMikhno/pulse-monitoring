@@ -60,8 +60,15 @@ public class App {
             .key(Map.of(PATIENT_ID_ATTRIBUTE, AttributeValue.builder().n(patientId).build()))
             .build();
 			Map<String, AttributeValue> item = client.getItem(request).item();
-		
-			return item == null ? null : Integer.parseInt(item.get(VALUE_ATTRIBUTE).n());
+		Integer res = null;
+			if (item != null && item.containsKey(VALUE_ATTRIBUTE)) {
+				AttributeValue valueAttribute = item.get(VALUE_ATTRIBUTE);
+				
+				if (valueAttribute != null && valueAttribute.n() != null) {
+					res= Integer.parseInt(valueAttribute.n());
+				}
+			}		
+			return res;
 	}
 
 	private static void factorSetUp() {
