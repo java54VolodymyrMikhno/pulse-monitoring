@@ -14,6 +14,7 @@ public class App {
 	static DynamoDbClient client = DynamoDbClient.builder().build();
 	static Logger logger = Logger.getLogger("pulse-jump-analyzer");
 	static float FACTOR;
+	static boolean configLogged = false;
 
 	static {
 		loggerSetUp();
@@ -21,7 +22,7 @@ public class App {
 	};
 
 	public void handleRequest(DynamodbEvent event, Context context) {
-		logger.config(logEnvironmentVariables());
+		logConfigOnce();
 		event.getRecords().forEach(r -> {
 			logger.finest("Processing record: " + r);
 			Map<String, com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> map = r
@@ -48,6 +49,13 @@ public class App {
 					map.get(PATIENT_ID_ATTRIBUTE).getN(),
 					map.get(VALUE_ATTRIBUTE).getN()));
 		});
+	}
+
+	private void logConfigOnce() {
+		if (!configLogged) {
+			logger.config(logEnvironmentVariables());
+			configLogged = true;
+		}
 	}
 
 	private static String logEnvironmentVariables() {

@@ -12,8 +12,6 @@ Globals:
     Environment:
       Variables:
         LOGGER_LEVEL: INFO
-        FACTOR: "0.2"
-      
 
 Resources:
   #DynamoDB Streams specification
@@ -94,7 +92,9 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       CodeUri: pulse-jump-analyzer
-      
+      Environment:
+        Variables:
+         FACTOR: "0.2"
       Policies:
         - Statement:
           - Effect: Allow
