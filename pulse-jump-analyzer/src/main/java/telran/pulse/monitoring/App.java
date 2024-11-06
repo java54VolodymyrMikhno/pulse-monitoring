@@ -18,10 +18,10 @@ public class App {
 	static {
 		loggerSetUp();
 		factorSetUp();
-		logger.config(logEnvironmentVariables());
 	};
 
 	public void handleRequest(DynamodbEvent event, Context context) {
+		logger.config(logEnvironmentVariables());
 		event.getRecords().forEach(r -> {
 			logger.finest("Processing record: " + r);
 			Map<String, com.amazonaws.services.lambda.runtime.events.models.dynamodb.AttributeValue> map = r
