@@ -115,6 +115,10 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       CodeUri: pulse-values-analyzer
+      Environment:
+        Variables:
+         RANGE_PROVIDER_URL: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/range"
+          
       Policies:
         - Statement:
           - Effect: Allow
@@ -131,4 +135,23 @@ Resources:
               Filters: 
               - Pattern: '{"eventName": ["INSERT"]}'      
   
- 
+  RangeProviderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: range-provider
+      Events:
+        RangeProviderApi:
+          Type: Api
+          Properties:
+            Path: /range
+            Method: get
+Outputs:
+  RangeProviderApi:
+    Description: "API Gateway URL for range-provider function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/range/"
+  RangeProviderFunction:
+    Description: "Range Provider Lambda Function ARN"
+    Value: !GetAtt RangeProviderFunction.Arn
+  RangeProviderFunctionRole:
+    Description: "IAM Role for Range Provider function"
+    Value: !GetAtt RangeProviderFunctionRole.Arn         
