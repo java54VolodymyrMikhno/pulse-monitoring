@@ -139,6 +139,18 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: range-provider
+      Environment:
+        Variables:
+          RANGE_1_MIN: 60
+          RANGE_1_MAX: 150
+          RANGE_2_MIN: 70
+          RANGE_2_MAX: 160
+          RANGE_3_MIN: 50
+          RANGE_3_MAX: 250
+          RANGE_4_MIN: 60
+          RANGE_4_MAX: 150
+          RANGE_5_MIN: 70
+          RANGE_5_MAX: 140
       Events:
         RangeProviderApi:
           Type: Api

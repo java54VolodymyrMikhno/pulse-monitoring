@@ -1,10 +1,8 @@
 package telran.pulse.monitoring;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.net.http.*;
 import java.util.*;
 import java.util.logging.*;
 
@@ -88,10 +86,10 @@ public class App {
 				JSONObject json = new JSONObject(response.body());
 				return new Range(json.getInt("min"), json.getInt("max"));
 			} else {
-				throw new RuntimeException("Failed to fetch range: " + response.body());
+				throw new RuntimeException( response.body());
 			}
-		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException("Error fetching range", e);
+		} catch ( Exception e) {
+			throw new RuntimeException( e);
 		}
 
 	}
