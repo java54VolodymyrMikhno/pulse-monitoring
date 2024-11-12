@@ -15,24 +15,6 @@
     <build>
         <plugins>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <!-- Here come other details
-            ...
-            -->
-            <configuration>
-              <archive>
-                <manifest>
-                  <addClasspath>true</addClasspath>
-                  <mainClass>telran.net.games.BullsCowsServerAppl</mainClass>
-                </manifest>
-              </archive>
-            </configuration>
-            <!-- Here come other details
-            ...
-            -->
-          </plugin>
-          <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.6.0</version>
