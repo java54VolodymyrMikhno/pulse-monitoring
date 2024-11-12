@@ -1,11 +1,10 @@
 package telran.pulse.monitoring;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.*;
-import java.util.logging.*;
+import java.util.logging.Logger;
 
+import static telran.pulse.monitoring.LoggerConfig.*;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.DynamodbEvent;
@@ -19,10 +18,8 @@ public class App {
     String topicARN;
     String awsRegion;
     SnsClient snsClient;
-    static Logger logger = Logger.getLogger("abnormal-values-notifier");
-    static {
-		loggerSetUp();
-	}
+    
+    static Logger logger = getLogger();
 
     public void handleRequest(DynamodbEvent event, Context context) {
         setUpEnvironment();
@@ -34,26 +31,6 @@ public class App {
             publishMessage(message);
         });
     }
-    private static void loggerSetUp() {
-		Level loggerLevel = getLoggerLevel();
-		LogManager.getLogManager().reset();
-		Handler handler = new ConsoleHandler();
-		logger.setLevel(loggerLevel);
-		handler.setLevel(Level.FINEST);
-		logger.addHandler(handler);
-	}
-
-	private static Level getLoggerLevel() {
-		String levelStr = System.getenv()
-				.getOrDefault(LOGGER_LEVEL_ENV_VARIABLE, DEFAULT_LOGGER_LEVEL);
-		Level res = null;
-		try {
-			res = Level.parse(levelStr);
-		} catch (Exception e) {
-			res = Level.parse(DEFAULT_LOGGER_LEVEL);
-		}
-		return res;
-	}
 
     private void publishMessage(String message) {
         PublishRequest request = PublishRequest.builder()
@@ -68,7 +45,6 @@ public class App {
         }
     }
     
-
     private String getMessage(Map<String, AttributeValue> image) {
         String message = String.format("patient %s\nabnormal pulse value %s\ndate-time %s",
                 image.get("patientId").getN(), image.get("value").getN(),

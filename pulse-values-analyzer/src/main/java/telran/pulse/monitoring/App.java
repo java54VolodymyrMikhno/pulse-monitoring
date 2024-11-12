@@ -18,7 +18,7 @@ import software.amazon.awssdk.services.dynamodb.*;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest.Builder;
 import static telran.pulse.monitoring.Constants.*;
-
+import static telran.pulse.monitoring.LoggerConfig.*;
 record Range(int min, int max) {
 
 }
@@ -28,9 +28,8 @@ public class App {
 	static String baseURL;
 	static DynamoDbClient client = DynamoDbClient.builder().build();
 	static Builder dynamoItemRequest;
-	static Logger logger = Logger.getLogger("pulse-value-analyzer");
+	static Logger logger = getLogger();
 	static {
-		loggerSetUp();
 		baseURLSetUp();
 	}
 	static HashMap<String, Range> ranges = new HashMap<>();
@@ -61,26 +60,6 @@ public class App {
 
 	}
 
-	private static void loggerSetUp() {
-		Level loggerLevel = getLoggerLevel();
-		LogManager.getLogManager().reset();
-		Handler handler = new ConsoleHandler();
-		logger.setLevel(loggerLevel);
-		handler.setLevel(Level.FINEST);
-		logger.addHandler(handler);
-	}
-
-	private static Level getLoggerLevel() {
-		String levelStr = System.getenv()
-				.getOrDefault(LOGGER_LEVEL_ENV_VARIABLE, DEFAULT_LOGGER_LEVEL);
-		Level res = null;
-		try {
-			res = Level.parse(levelStr);
-		} catch (Exception e) {
-			res = Level.parse(DEFAULT_LOGGER_LEVEL);
-		}
-		return res;
-	}
 
 	private void processPulseValue(Map<String, AttributeValue> map) {
 		int value = Integer.parseInt(map.get(VALUE_ATTRIBUTE).getN());

@@ -11,18 +11,18 @@ import software.amazon.awssdk.services.dynamodb.*;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest.Builder;
 import static telran.pulse.monitoring.Constants.*;
+import static telran.pulse.monitoring.LoggerConfig.*;
 
 public class App {
 	static DynamoDbClient clientDynamo = DynamoDbClient.builder().build();
 	static Builder requestInsertLastValues;
 	static Builder requestInsertJumpValues;
-	static Logger logger = Logger.getLogger("pulse-jump-analyzer");
+	static Logger logger = getLogger();
 	static float factor;
 
 	HashMap<String, Integer> lastValues = new HashMap<>();
 
 	public void handleRequest(DynamodbEvent event, Context context) {
-		loggerSetUp();
 		factorSetUp();
 		requestsSetUp();
 		var records = event.getRecords();
@@ -110,28 +110,9 @@ public class App {
 
 	}
 
-	private static void loggerSetUp() {
-		Level loggerLevel = getLoggerLevel();
-		LogManager.getLogManager().reset();
-		Handler handler = new ConsoleHandler();
-		logger.setLevel(loggerLevel);
-		handler.setLevel(Level.FINEST);
-		logger.addHandler(handler);
-		logger.config("logger level is " + loggerLevel);
-	}
+	
 
-	private static Level getLoggerLevel() {
-		String levelStr = System.getenv()
-				.getOrDefault(LOGGER_LEVEL_ENV_VARIABLE, DEFAULT_LOGGER_LEVEL);
-		Level res = null;
-		try {
-			res = Level.parse(levelStr);
-		} catch (Exception e) {
-			logger.warning(levelStr + " wrong logger level take default value " + DEFAULT_LOGGER_LEVEL);
-			res = Level.parse(DEFAULT_LOGGER_LEVEL);
-		}
-		return res;
-	}
+	
 
 	private void jumpProcessing(String patientId, Integer currentValue, Integer lastValue,
 	 String timestamp) {
