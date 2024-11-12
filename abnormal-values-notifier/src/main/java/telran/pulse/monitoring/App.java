@@ -56,7 +56,7 @@ public class App {
     private Object getDateTime(String timestampStr) {
         long timestamp = Long.parseLong(timestampStr);
         Instant instant = Instant.ofEpochMilli(timestamp);
-        LocalDateTime res = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        LocalDateTime res = LocalDateTime.ofInstant(instant, ZoneId.of("Asia/Jerusalem"));
         logger.finer("Parsed timestamp " + timestampStr + " to LocalDateTime: " + res);
         return res;
     }
